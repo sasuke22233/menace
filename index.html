@@ -447,6 +447,7 @@
             transform: scale(1.05) rotate(5deg);
             background: rgba(255,255,255,0.05);
         }
+
         
         /* Contact Section */
         .contact-links {
@@ -497,7 +498,220 @@
                 opacity: 1;
             }
         }
-        
+        /* Добавь этот CSS перед медиа-запросами */
+.subsection-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(24px, 3vw, 32px);
+    margin: 60px 0 30px;
+    letter-spacing: 3px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1s ease;
+    text-align: center;
+}
+
+.subsection-title.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Zodiac Cards */
+.zodiac-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin-top: 20px;
+}
+
+.zodiac-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+}
+
+.zodiac-card {
+    aspect-ratio: 1;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.8);
+    position: relative;
+    overflow: hidden;
+}
+
+.zodiac-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.zodiac-card:hover::before {
+    opacity: 1;
+}
+
+.zodiac-card.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.zodiac-card:hover {
+    transform: scale(1.05) translateY(-5px);
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.2);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+/* Popup Styles */
+.zodiac-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.zodiac-popup.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.popup-content {
+    background: rgba(30,30,30,0.95);
+    border: 1px solid rgba(255,255,255,0.1);
+    max-width: 500px;
+    width: 90%;
+    padding: 40px;
+    position: relative;
+    transform: translateY(50px);
+    opacity: 0;
+    transition: all 0.5s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.zodiac-popup.active .popup-content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.popup-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 30px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+.popup-close:hover {
+    opacity: 1;
+}
+
+.popup-sign {
+    font-size: 60px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.popup-title {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    margin-bottom: 10px;
+    letter-spacing: 3px;
+    text-align: center;
+}
+
+.popup-date {
+    font-size: 14px;
+    opacity: 0.7;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.popup-loader {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px 0;
+}
+
+.loader-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--text-secondary);
+    border-radius: 50%;
+    opacity: 0.7;
+    animation: loadingPulse 1.4s infinite ease-in-out;
+}
+
+.loader-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.loader-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes loadingPulse {
+    0%, 100% { transform: scale(0.5); opacity: 0.5; }
+    50% { transform: scale(1.2); opacity: 1; }
+}
+
+.popup-prediction {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    font-size: 18px;
+    text-align: center;
+    position: relative;
+}
+
+.popup-prediction::before,
+.popup-prediction::after {
+    content: '"';
+    font-size: 24px;
+    opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+    .zodiac-grid {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .zodiac-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(6, 1fr);
+    }
+    
+    .popup-content {
+        padding: 30px 20px;
+    }
+}
         /* Mobile Responsive */
         @media (max-width: 768px) {
             nav {
@@ -691,6 +905,38 @@
             <div class="meme-card">🕷️</div>
             <div class="meme-card">🖤</div>
         </div>
+
+    <h3 class="subsection-title">зодиак</h3>
+    <div class="zodiac-container">
+        <div class="zodiac-grid">
+            <div class="zodiac-card" data-sign="aries">♈</div>
+            <div class="zodiac-card" data-sign="taurus">♉</div>
+            <div class="zodiac-card" data-sign="gemini">♊</div>
+            <div class="zodiac-card" data-sign="cancer">♋</div>
+            <div class="zodiac-card" data-sign="leo">♌</div>
+            <div class="zodiac-card" data-sign="virgo">♍</div>
+            <div class="zodiac-card" data-sign="libra">♎</div>
+            <div class="zodiac-card" data-sign="scorpio">♏</div>
+            <div class="zodiac-card" data-sign="sagittarius">♐</div>
+            <div class="zodiac-card" data-sign="capricorn">♑</div>
+            <div class="zodiac-card" data-sign="aquarius">♒</div>
+            <div class="zodiac-card" data-sign="pisces">♓</div>
+        </div>
+        <div class="zodiac-popup">
+            <div class="popup-content">
+                <div class="popup-close">×</div>
+                <div class="popup-sign"></div>
+                <h3 class="popup-title"></h3>
+                <div class="popup-date"></div>
+                <div class="popup-loader">
+                    <span class="loader-dot"></span>
+                    <span class="loader-dot"></span>
+                    <span class="loader-dot"></span>
+                </div>
+                <p class="popup-prediction"></p>
+            </div>
+        </div>
+    </div>
     </section>
 
     <!-- Contact Section -->
@@ -946,8 +1192,7 @@ batContainer.addEventListener('mouseenter', () => {
 
         // Console easter egg
         console.log('%c🦇 menace | murcielago 🦇', 'background: #000; color: #fff; font-size: 20px; padding: 10px;');
-        console.log('%cНашёл пасхалку? Молодец 💀', 'color: #888; font-style: italic;');
-
+       
         // Mobile touch optimization
         if ('ontouchstart' in window) {
             document.body.style.cursor = 'default';
@@ -1071,6 +1316,162 @@ batContainer.addEventListener('mouseenter', () => {
                 // All initialization code is already in place
             });
         }
+
+
+// Zodiac Horoscope Functionality
+const zodiacNames = {
+    aries: "Овен",
+    taurus: "Телец",
+    gemini: "Близнецы", 
+    cancer: "Рак",
+    leo: "Лев",
+    virgo: "Дева",
+    libra: "Весы",
+    scorpio: "Скорпион",
+    sagittarius: "Стрелец",
+    capricorn: "Козерог",
+    aquarius: "Водолей",
+    pisces: "Рыбы"
+};
+
+const zodiacRussianToLatin = {
+    "Овен": "aries",
+    "Телец": "taurus",
+    "Близнецы": "gemini",
+    "Рак": "cancer",
+    "Лев": "leo",
+    "Дева": "virgo",
+    "Весы": "libra",
+    "Скорпион": "scorpio",
+    "Стрелец": "sagittarius",
+    "Козерог": "capricorn",
+    "Водолей": "aquarius",
+    "Рыбы": "pisces"
+};
+
+const horoscopeCache = {
+    lastUpdated: null,
+    predictions: {}
+};
+
+const zodiacCards = document.querySelectorAll('.zodiac-card');
+const zodiacPopup = document.querySelector('.zodiac-popup');
+const popupContent = document.querySelector('.popup-content');
+const popupClose = document.querySelector('.popup-close');
+const popupSign = document.querySelector('.popup-sign');
+const popupTitle = document.querySelector('.popup-title');
+const popupDate = document.querySelector('.popup-date');
+const popupLoader = document.querySelector('.popup-loader');
+const popupPrediction = document.querySelector('.popup-prediction');
+
+// Форматирование даты по-русски
+function formatDate(date) {
+    const months = [
+        'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+        'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+    ];
+    
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    
+    return `${day} ${month} ${year}`;
+}
+
+// Функция для получения гороскопа
+async function fetchHoroscope(sign) {
+    // Проверяем кеш
+    const today = new Date().toDateString();
+    if (horoscopeCache.lastUpdated === today && horoscopeCache.predictions[sign]) {
+        return horoscopeCache.predictions[sign];
+    }
+    
+    // Здесь должен быть код для получения реального гороскопа с API
+    // В реальном сценарии это должно быть реализовано через серверный прокси
+    // Поскольку прямые запросы на horo.mail.ru будут блокироваться из-за CORS
+    
+    // Симулируем задержку сети
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // Генерируем случайный гороскоп для демонстрации
+    const predictions = [
+        "Сегодня звезды благоволят вашим творческим начинаниям. Любые проекты, требующие нестандартного мышления, будут успешны.",
+        "Ваша природная практичность сегодня поможет решить сложную ситуацию. Финансовые вопросы потребуют пристального внимания.",
+        "Ваша коммуникабельность сегодня будет на высоте. Используйте это для налаживания полезных связей.",
+        "Интуиция сегодня подскажет верное решение в сложной ситуации. Семейные дела потребуют вашего внимания.",
+        "Ваше природное лидерство сегодня принесет успех в коллективных начинаниях. Не бойтесь проявлять инициативу.",
+        "Сегодня ваше внимание к деталям поможет избежать досадных ошибок. Хороший день для планирования и структурирования задач."
+    ];
+    
+    const randomPrediction = predictions[Math.floor(Math.random() * predictions.length)];
+    
+    // Сохраняем в кеш
+    if (horoscopeCache.lastUpdated !== today) {
+        horoscopeCache.lastUpdated = today;
+        horoscopeCache.predictions = {};
+    }
+    horoscopeCache.predictions[sign] = randomPrediction;
+    
+    return randomPrediction;
+}
+
+// Обработчик клика по знаку зодиака
+zodiacCards.forEach(card => {
+    card.addEventListener('click', async function() {
+        const sign = this.getAttribute('data-sign');
+        const zodiacName = zodiacNames[sign];
+        
+        // Открываем попап
+        zodiacPopup.classList.add('active');
+        
+        // Устанавливаем базовую информацию
+        popupSign.textContent = this.textContent;
+        popupTitle.textContent = zodiacName;
+        popupDate.textContent = `Гороскоп на ${formatDate(new Date())}`;
+        popupPrediction.textContent = '';
+        popupLoader.style.display = 'flex';
+        
+        // Добавляем эффект глитча
+        this.style.textShadow = '2px 0 0 rgba(255,0,0,0.3), -2px 0 0 rgba(0,255,255,0.3)';
+        setTimeout(() => {
+            this.style.textShadow = 'none';
+        }, 200);
+        
+        try {
+            // Получаем гороскоп
+            const prediction = await fetchHoroscope(sign);
+            
+            // Скрываем лоадер и показываем результат
+            popupLoader.style.display = 'none';
+            popupPrediction.textContent = prediction;
+        } catch (error) {
+            // В случае ошибки
+            popupLoader.style.display = 'none';
+            popupPrediction.textContent = "Не удалось загрузить гороскоп. Возможно, звезды сегодня не в настроении...";
+        }
+    });
+});
+
+// Закрытие попапа
+popupClose.addEventListener('click', () => {
+    zodiacPopup.classList.remove('active');
+});
+
+zodiacPopup.addEventListener('click', (e) => {
+    if (e.target === zodiacPopup) {
+        zodiacPopup.classList.remove('active');
+    }
+});
+
+// Наблюдатель для анимации
+document.querySelectorAll('.subsection-title, .zodiac-card').forEach(el => {
+    observer.observe(el);
+});
+
+// Метод для реальной реализации на сервере
+/* 
+
+*/
     </script>
 </body>
 </html>
