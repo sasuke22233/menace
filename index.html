@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>menace | murcielago</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:wght@300;400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --accent: #333333;
+            --glow: rgba(255, 255, 255, 0.1);
+        }
+        
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="2" fill="white"/></svg>'), auto;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--text-primary);
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        nav a:hover {
+            color: var(--text-primary);
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.02) 0%, transparent 70%);
+        }
+        
+        .hero h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(60px, 10vw, 120px);
+            font-weight: 600;
+            letter-spacing: 10px;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease forwards;
+            text-shadow: 0 0 30px rgba(255,255,255,0.1);
+        }
+        
+        /* Realistic Bat */
+        .bat-container {
+            position: relative;
+            width: 200px;
+            height: 150px;
+            margin: 40px 0;
+            opacity: 0;
+            animation: fadeIn 2s ease 0.5s forwards;
+            cursor: pointer;
+        }
+        
+        .realistic-bat {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        
+        .bat-body {
+            position: absolute;
+            width: 40px;
+            height: 60px;
+            background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
+            border-radius: 50% 50% 40% 40%;
+            left: 50%;
+            top: 60%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+        
+        .bat-head {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: #2a2a2a;
+            border-radius: 50%;
+            left: 50%;
+            top: 80%;
+            transform: translateX(-50%);
+            z-index: 3;
+        }
+        
+        .bat-ear {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 15px solid #2a2a2a;
+            top: -10px;
+        }
+        
+        .bat-ear.left {
+            left: 2px;
+            transform: rotate(-15deg);
+        }
+        
+        .bat-ear.right {
+            right: 2px;
+            transform: rotate(15deg);
+        }
+        
+        .bat-wing {
+            position: absolute;
+            width: 80px;
+            height: 100px;
+            background: #1a1a1a;
+            top: 50%;
+            transform-origin: 0 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .bat-wing {
+    position: absolute;
+    width: 80px;
+    height: 100px;
+    background: #1a1a1a;
+    top: 50%;
+    transform-origin: center center;
+    transition: transform 0.3s ease;
+}
+
+.bat-wing.left {
+    left: 0;
+    right: auto;
+    clip-path: polygon(0 0, 100% 20%, 90% 40%, 100% 60%, 80% 80%, 100% 100%, 0 50%);
+    transform: translateY(-30px) rotateY(180deg) rotate(-20deg);
+}
+
+.bat-wing.right {
+    left: auto;
+    right: 0;
+    clip-path: polygon(0 0, 100% 20%, 90% 40%, 100% 60%, 80% 80%, 100% 100%, 0 50%);
+    transform: translateY(-30px) rotate(-20deg);
+}
+
+.bat-container:hover .bat-wing.left {
+    transform: translateY(-30px) rotateY(180deg) rotate(-45deg);
+}
+
+.bat-container:hover .bat-wing.right {
+    transform: translateY(-30px) rotate(-45deg);
+}
+        
+        .bat-container:hover .realistic-bat {
+            animation: batFly 0.5s ease-in-out infinite alternate;
+        }
+        
+        @keyframes batFly {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+        
+        .subtitle {
+            font-size: clamp(18px, 3vw, 24px);
+            letter-spacing: 8px;
+            color: var(--text-secondary);
+            opacity: 0;
+            animation: fadeIn 2s ease 1s forwards;
+        }
+        
+        /* Floating Elements */
+        .floating-elements {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .flower {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            opacity: 0.1;
+            filter: invert(1);
+            animation: float 20s infinite linear;
+        }
+        
+        .small-bat {
+            position: absolute;
+            width: 30px;
+            height: 20px;
+            opacity: 0.15;
+            animation: flyAround 15s infinite linear;
+        }
+        
+        .small-bat svg {
+            width: 100%;
+            height: 100%;
+            fill: #333;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+        
+        @keyframes flyAround {
+            0% { transform: translate(0, 0) scaleX(1); }
+            25% { transform: translate(100px, -50px) scaleX(-1); }
+            50% { transform: translate(-50px, -100px) scaleX(-1); }
+            75% { transform: translate(-100px, 50px) scaleX(1); }
+            100% { transform: translate(0, 0) scaleX(1); }
+        }
+        
+        /* Sections */
+        section {
+            min-height: 100vh;
+            padding: 100px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(32px, 5vw, 48px);
+            margin-bottom: 50px;
+            letter-spacing: 5px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease;
+            text-align: center;
+        }
+        
+        .section-title.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* About Section */
+        .about-content {
+            max-width: 600px;
+            text-align: center;
+            font-size: clamp(16px, 2.5vw, 20px);
+            line-height: 1.8;
+            color: var(--text-secondary);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease 0.3s;
+            padding: 0 20px;
+        }
+        
+        .about-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        .skill-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            cursor: pointer;
+        }
+        
+        .skill-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .skill-card:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.3);
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(255,255,255,0.1);
+        }
+        
+        .skill-icon {
+            font-size: clamp(36px, 5vw, 48px);
+            margin-bottom: 20px;
+        }
+        
+        .skill-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(20px, 3vw, 24px);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+        
+        .skill-card p {
+            font-size: clamp(14px, 2vw, 16px);
+        }
+        
+        /* Portfolio Section */
+        .portfolio-status {
+            font-size: clamp(20px, 3vw, 24px);
+            color: var(--text-secondary);
+            letter-spacing: 3px;
+            position: relative;
+            padding: 20px 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 1s ease;
+            overflow: hidden;
+        }
+        
+        .portfolio-status.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .portfolio-status::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        /* Memes Section */
+        .memes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 800px;
+    width: 100%;
+}
+
+@media (max-width: 480px) {
+    .memes-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+}
+        
+        .meme-card {
+            aspect-ratio: 1;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(32px, 5vw, 48px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        
+        .meme-card.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .meme-card:hover {
+            transform: scale(1.05) rotate(5deg);
+            background: rgba(255,255,255,0.05);
+        }
+        
+        /* Contact Section */
+        .contact-links {
+            display: flex;
+            gap: 40px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 30px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            opacity: 0;
+            transform: translateY(30px);
+            font-size: clamp(14px, 2vw, 16px);
+        }
+        
+        .contact-link.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .contact-link:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(255,255,255,0.1);
+        }
+        /* Animations */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 15px 20px;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+            
+            nav a {
+                font-size: 12px;
+                letter-spacing: 1px;
+            }
+            
+            section {
+                padding: 80px 20px;
+                min-height: 100vh;
+            }
+            
+            .hero h1 {
+                letter-spacing: 5px;
+            }
+            
+            .bat-container {
+                width: 150px;
+                height: 120px;
+            }
+            
+            .contact-links {
+                flex-direction: column;
+                gap: 20px;
+                width: 100%;
+            }
+            
+            .contact-link {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .skill-card {
+                padding: 30px 20px;
+            }
+            
+            .memes-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 15px;
+            }
+            
+            .small-bat {
+                width: 20px;
+                height: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 50px;
+                letter-spacing: 3px;
+            }
+            
+            .subtitle {
+                font-size: 16px;
+                letter-spacing: 5px;
+            }
+            
+            .section-title {
+                font-size: 28px;
+                margin-bottom: 30px;
+            }
+            
+            .about-content {
+                font-size: 16px;
+            }
+            
+            .memes-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Landscape mobile */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .hero {
+                min-height: 100vh;
+                padding: 20px;
+            }
+            
+            section {
+                min-height: auto;
+                padding: 60px 20px;
+            }
+            
+            .bat-container {
+                width: 120px;
+                height: 80px;
+                margin: 20px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#home">главная</a></li>
+            <li><a href="#about">обо мне</a></li>
+            <li><a href="#skills">навыки</a></li>
+            <li><a href="#portfolio">портфолио</a></li>
+            <li><a href="#memes">выебоны</a></li>
+            <li><a href="#contact">контакты</a></li>
+        </ul>
+    </nav>
+
+    <!-- Floating Elements -->
+    <div class="floating-elements"></div>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <h1>menace</h1>
+        <div class="bat-container">
+            <div class="realistic-bat">
+                <div class="bat-body">
+                    <div class="bat-head">
+                        <div class="bat-ear left"></div>
+                        <div class="bat-ear right"></div>
+                    </div>
+                </div>
+                <div class="bat-wing left"></div>
+                <div class="bat-wing right"></div>
+            </div>
+        </div>
+        <p class="subtitle">murcielago</p>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2 class="section-title">обо мне</h2>
+        <div class="about-content">
+            <p>Тут надо профессионально напиздеть.</p>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+        <h2 class="section-title">навыки</h2>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <div class="skill-icon">🤖</div>
+                <h3 class="skill-title">Боты</h3>
+                <p>Telegram, Discord, автоматизация</p>
+            </div>
+            <div class="skill-card">
+                <div class="skill-icon">🌐</div>
+                <h3 class="skill-title">Сайты</h3>
+                <p>Современный веб-дизайн и разработка</p>
+            </div>
+            <div class="skill-card">
+                <div class="skill-icon">📜</div>
+                <h3 class="skill-title">Скрипты</h3>
+                <p>Python, JavaScript, автоматизация</p>
+            </div>
+            <div class="skill-card">
+               <div class="skill-icon">🎮</div>
+               <h3 class="skill-title">Игры</h3>
+               <p>Dota 2, Valorant, CS2, Deadlock</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio">
+        <h2 class="section-title">портфолио</h2>
+        <div class="portfolio-status">
+            <span>в разработке</span>
+        </div>
+    </section>
+
+    <!-- Memes Section -->
+    <section id="memes">
+        <h2 class="section-title">выебоны</h2>
+        <div class="memes-grid">
+            <div class="meme-card">💀</div>
+            <div class="meme-card">🦇</div>
+            <div class="meme-card">⚰️</div>
+            <div class="meme-card">🌙</div>
+            <div class="meme-card">🕷️</div>
+            <div class="meme-card">🖤</div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2 class="section-title">контакты</h2>
+        <div class="contact-links">
+            <a href="https://t.me/Menaceeq" class="contact-link" target="_blank">
+                <span>📱</span>
+                <span>Telegram</span>
+            </a>
+            <a href="https://lolz.live/sasuke/" class="contact-link" target="_blank">
+                <span>🌐</span>
+                <span>LolzTeam</span>
+            </a>
+        </div>
+    </section>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Generate floating elements
+        function createFloatingElements() {
+    const container = document.querySelector('.floating-elements');
+    
+    // Create flowers
+    for (let i = 0; i < 12; i++) {
+        const flower = document.createElement('div');
+        flower.className = 'flower';
+        flower.innerHTML = '🥀';
+        flower.style.left = Math.random() * 100 + '%';
+        flower.style.animationDelay = Math.random() * 20 + 's';
+        flower.style.animationDuration = (20 + Math.random() * 10) + 's';
+        container.appendChild(flower);
+    }
+    
+    // Create more bats (increased to 15)
+    for (let i = 0; i < 15; i++) {
+        const bat = document.createElement('div');
+        bat.className = 'small-bat';
+        bat.innerHTML = `
+            <svg viewBox="0 0 100 50">
+                <path d="M50 25 C30 15, 10 15, 5 30 C5 32, 10 30, 15 28 C20 30, 25 30, 30 28 C35 30, 40 30, 45 28 C48 30, 52 30, 55 28 C60 30, 65 30, 70 28 C75 30, 80 30, 85 28 C90 30, 95 32, 95 30 C90 15, 70 15, 50 25 Z"/>
+            </svg>
+        `;
+        bat.style.left = Math.random() * 100 + '%';
+        bat.style.top = Math.random() * 100 + '%';
+        bat.style.animationDelay = Math.random() * 15 + 's';
+        bat.style.animationDuration = (15 + Math.random() * 10) + 's';
+        bat.style.opacity = 0.1 + Math.random() * 0.1;
+        container.appendChild(bat);
+    }
+}
+        createFloatingElements();
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Stagger animation for grid items
+                    if (entry.target.classList.contains('skill-card') || 
+                        entry.target.classList.contains('meme-card')) {
+                        const cards = entry.target.parentElement.children;
+                        Array.from(cards).forEach((card, index) => {
+                            setTimeout(() => {
+                                card.classList.add('visible');
+                            }, index * 100);
+                        });
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements
+        document.querySelectorAll('.section-title, .about-content, .skill-card, .portfolio-status, .meme-card, .contact-link').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Parallax effect
+        let ticking = false;
+        function updateParallax() {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.floating-elements > *');
+            
+            parallaxElements.forEach(el => {
+                const speed = el.classList.contains('small-bat') ? 0.3 : 0.5;
+                const yPos = -(scrolled * speed);
+                el.style.transform = `${el.style.transform.split('translateY')[0]} translateY(${yPos}px)`;
+            });
+            
+            ticking = false;
+        }
+
+        function requestTick() {
+            if (!ticking) {
+                window.requestAnimationFrame(updateParallax);
+                ticking = true;
+            }
+        }
+
+        window.addEventListener('scroll', requestTick);
+
+        // Navbar hide/show on scroll
+        let lastScroll = 0;
+        const navbar = document.querySelector('nav');
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll <= 0) {
+                navbar.style.transform = 'translateY(0)';
+                return;
+            }
+            
+            if (currentScroll > lastScroll && currentScroll > 100) {
+                navbar.style.transform = 'translateY(-100%)';
+            } else {
+                navbar.style.transform = 'translateY(0)';
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Meme card interactions
+        const memeCards = document.querySelectorAll('.meme-card');
+        const memeEmojis = ['💀', '🦇', '⚰️', '🌙', '🕷️', '🖤', '🔪', '🩸', '👻', '🕸️', '🌑', '⚡'];
+
+        memeCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const randomEmoji = memeEmojis[Math.floor(Math.random() * memeEmojis.length)];
+                this.style.transform = 'scale(1.2) rotate(360deg)';
+                this.textContent = randomEmoji;
+                
+                setTimeout(() => {
+                    this.style.transform = 'scale(1) rotate(0deg)';
+                }, 300);
+            });
+        });
+
+        // Glitch effect on hover for title
+        const title = document.querySelector('.hero h1');
+        title.addEventListener('mouseenter', function() {
+            this.style.textShadow = '2px 2px 0 rgba(255,0,0,0.3), -2px -2px 0 rgba(0,255,255,0.3)';
+            setTimeout(() => {
+                this.style.textShadow = '0 0 30px rgba(255,255,255,0.1)';
+            }, 100);
+        });
+
+        // Bat wing flapping animation on hover
+        const batContainer = document.querySelector('.bat-container');
+        let isFlapping = false;
+
+batContainer.addEventListener('mouseenter', () => {
+    if (!isFlapping) {
+        isFlapping = true;
+        const wings = document.querySelectorAll('.bat-wing');
+        let flapCount = 0;
+        
+        const flapInterval = setInterval(() => {
+            wings.forEach(wing => {
+                wing.style.transition = 'transform 0.1s ease';
+            });
+            
+            if (flapCount % 2 === 0) {
+                document.querySelector('.bat-wing.left').style.transform = 'translateY(-30px) rotateY(180deg) rotate(-60deg)';
+                document.querySelector('.bat-wing.right').style.transform = 'translateY(-30px) rotate(-60deg)';
+            } else {
+                document.querySelector('.bat-wing.left').style.transform = 'translateY(-30px) rotateY(180deg) rotate(-10deg)';
+                document.querySelector('.bat-wing.right').style.transform = 'translateY(-30px) rotate(-10deg)';
+            }
+            
+            flapCount++;
+            
+            if (flapCount > 6) {
+                clearInterval(flapInterval);
+                isFlapping = false;
+                wings.forEach(wing => {
+                    wing.style.transition = 'transform 0.3s ease';
+                });
+            }
+        }, 100);
+    }
+});
+
+        // Custom cursor trail
+        const coords = { x: 0, y: 0 };
+        const circles = [];
+
+        for (let i = 0; i < 5; i++) {
+            const circle = document.createElement('div');
+            circle.className = 'circle';
+            circle.style.cssText = `
+                position: fixed;
+                width: ${(5 - i) * 2}px;
+                height: ${(5 - i) * 2}px;
+                background: rgba(255, 255, 255, ${0.05 - i * 0.01});
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 9999;
+                transition: transform 0.1s;
+            `;
+            document.body.appendChild(circle);
+            circles.push(circle);
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            coords.x = e.clientX;
+            coords.y = e.clientY;
+        });
+
+        function animateCircles() {
+            let x = coords.x;
+            let y = coords.y;
+            
+            circles.forEach((circle, index) => {
+                circle.style.left = x - circle.offsetWidth / 2 + 'px';
+                circle.style.top = y - circle.offsetHeight / 2 + 'px';
+                
+                circle.style.transform = `scale(${(5 - index) / 5})`;
+                
+                const nextCircle = circles[index + 1] || circles[0];
+                x += (nextCircle.offsetLeft - x) * 0.3;
+                y += (nextCircle.offsetTop - y) * 0.3;
+            });
+            
+            requestAnimationFrame(animateCircles);
+        }
+
+        animateCircles();
+
+        // Loading animation
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 1s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+
+        // Console easter egg
+        console.log('%c🦇 menace | murcielago 🦇', 'background: #000; color: #fff; font-size: 20px; padding: 10px;');
+        console.log('%cНашёл пасхалку? Молодец 💀', 'color: #888; font-style: italic;');
+
+        // Mobile touch optimization
+        if ('ontouchstart' in window) {
+            document.body.style.cursor = 'default';
+            circles.forEach(circle => circle.style.display = 'none');
+            
+            // Touch-friendly bat interaction
+            batContainer.addEventListener('touchstart', () => {
+                const wings = document.querySelectorAll('.bat-wing');
+                wings.forEach(wing => {
+                    wing.style.transition = 'transform 0.2s ease';
+                });
+                document.querySelector('.bat-wing.left').style.transform = 'translateX(-20px) translateY(-30px) rotateY(180deg) rotate(-45deg)';
+                document.querySelector('.bat-wing.right').style.transform = 'translateX(20px) translateY(-30px) rotate(-45deg)';
+            });
+            
+            batContainer.addEventListener('touchend', () => {
+                const wings = document.querySelectorAll('.bat-wing');
+                wings.forEach(wing => {
+                    wing.style.transition = 'transform 0.3s ease';
+                });
+                document.querySelector('.bat-wing.left').style.transform = 'translateX(-20px) translateY(-30px) rotateY(180deg) rotate(-20deg)';
+                document.querySelector('.bat-wing.right').style.transform = 'translateX(20px) translateY(-30px) rotate(-20deg)';
+            });
+        }
+
+        // Performance optimization for mobile
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        if (isMobile) {
+            // Reduce number of floating elements on mobile
+            const floatingElements = document.querySelectorAll('.floating-elements > *');
+            floatingElements.forEach((el, index) => {
+                if (index > 5) {
+                    el.remove();
+                }
+            });
+        }
+
+        // Resize handler for responsive adjustments
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                // Recalculate animations if needed
+                const newIsMobile = window.matchMedia('(max-width: 768px)').matches;
+                if (newIsMobile !== isMobile) {
+                    location.reload();
+                }
+            }, 250);
+        });
+
+        // Add subtle background gradient animation
+        let gradientAngle = 0;
+        function animateBackground() {
+            gradientAngle += 0.5;
+            document.querySelector('.hero').style.background = 
+                `radial-gradient(circle at ${50 + Math.sin(gradientAngle * 0.01) * 10}% ${50 + Math.cos(gradientAngle * 0.01) * 10}%, rgba(255,255,255,0.02) 0%, transparent 70%)`;
+            requestAnimationFrame(animateBackground);
+        }
+        animateBackground();
+
+        // Typewriter effect for subtitle on load
+        const subtitle = document.querySelector('.subtitle');
+        const subtitleText = subtitle.textContent;
+        subtitle.textContent = '';
+        subtitle.style.opacity = '1';
+        
+        setTimeout(() => {
+            let charIndex = 0;
+            const typeInterval = setInterval(() => {
+                if (charIndex < subtitleText.length) {
+                    subtitle.textContent += subtitleText[charIndex];
+                    charIndex++;
+                } else {
+                    clearInterval(typeInterval);
+                }
+            }, 100);
+        }, 2000);
+
+        // Add page visibility handling
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                // Pause animations when page is not visible
+                document.querySelectorAll('.floating-elements > *').forEach(el => {
+                    el.style.animationPlayState = 'paused';
+                });
+            } else {
+                // Resume animations when page becomes visible
+                document.querySelectorAll('.floating-elements > *').forEach(el => {
+                    el.style.animationPlayState = 'running';
+                });
+            }
+        });
+
+        // Prevent right-click on images
+        document.addEventListener('contextmenu', (e) => {
+            if (e.target.tagName === 'IMG' || e.target.closest('.bat-container')) {
+                e.preventDefault();
+            }
+        });
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const sections = document.querySelectorAll('section');
+            const currentSection = Array.from(sections).findIndex(section => {
+                const rect = section.getBoundingClientRect();
+                return rect.top >= -100 && rect.top <= 100;
+            });
+
+            if (e.key === 'ArrowDown' && currentSection < sections.length - 1) {
+                e.preventDefault();
+                sections[currentSection + 1].scrollIntoView({ behavior: 'smooth' });
+            } else if (e.key === 'ArrowUp' && currentSection > 0) {
+                e.preventDefault();
+                sections[currentSection - 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        // Initialize everything after DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                // All initialization code is already in place
+            });
+        }
+    </script>
+</body>
+</html>
